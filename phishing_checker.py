@@ -1,4 +1,3 @@
-
 from urllib.parse import urlparse
 import ipaddress
 
@@ -32,9 +31,19 @@ def check_url(url):
     return warnings
 
 
+
 def main():
     print("=== Phishing URL Awareness Checker ===")
-    url = input("Enter a URL to check: ")
+    url = input("Enter a URL to check: ").strip()
+
+    if not url:
+        print("\nError: You did not enter a URL.")
+        return
+
+    parsed = urlparse(url)
+    if parsed.scheme.lower() not in ("http", "https") or not parsed.hostname:
+        print("\nError: Please enter a valid URL beginning with http:// or https://.")
+        return
 
     warnings = check_url(url)
 
@@ -42,10 +51,13 @@ def main():
         print("\nWarning signs found:")
         for warning in warnings:
             print("-", warning)
+        print(f"\nTotal warning signs: {len(warnings)}")
     else:
         print("\nNo warning signs detected by these checks.")
+        print("Total warning signs: 0")
 
     print("\nNote: This tool does not prove whether a URL is safe.")
+
 
 
 if __name__ == "__main__":
